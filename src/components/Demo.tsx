@@ -20,7 +20,7 @@ const Demo = () => {
 
   // RTK lazy query
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
-
+  
   // Load data from localStorage on mount
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
@@ -32,7 +32,7 @@ const Demo = () => {
     }
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const existingArticle = allArticles.find(
@@ -60,7 +60,7 @@ const Demo = () => {
     setTimeout(() => setCopied("false"), 3000);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
       handleSubmit(e);
     }
@@ -129,7 +129,7 @@ const Demo = () => {
             Well, that wasn't supposed to happen...
             <br />
             <span className='font-satoshi font-normal text-gray-700'>
-              {error?.data?.error}
+              {'data' in error ? JSON.stringify(error.data) : ""}
             </span>
           </p>
         ) : (
