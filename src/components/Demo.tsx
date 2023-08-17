@@ -4,11 +4,7 @@ import linkIcon from '@/assets/link.svg';
 import loader from '@/assets/loader.svg';
 import tick from '@/assets/tick.svg';
 import { useLazyGetSummaryQuery } from "@/services/article";
-
-interface ArticlesProp {
-  url: string;
-  summary: string;
-}
+import { ArticlesProp, DataProps } from "@/types";
 
 const Demo = () => {
   const [article, setArticle] = useState<ArticlesProp>({
@@ -17,10 +13,14 @@ const Demo = () => {
   });
   const [allArticles, setAllArticles] = useState<ArticlesProp[]>([]);
   const [copied, setCopied] = useState<string>("");
+  const [data, setData] = useState<DataProps>({"error": ""})
 
   // RTK lazy query
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
   
+  if (error && 'data' in error){
+    setData(error.data as DataProps)
+  }
   // Load data from localStorage on mount
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
@@ -129,7 +129,7 @@ const Demo = () => {
             Well, that wasn't supposed to happen...
             <br />
             <span className='font-satoshi font-normal text-gray-700'>
-              {'data' in error ? JSON.stringify(error.data) : ""}
+              {data.error}
             </span>
           </p>
         ) : (
