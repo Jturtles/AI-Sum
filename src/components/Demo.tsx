@@ -13,14 +13,10 @@ const Demo = () => {
   });
   const [allArticles, setAllArticles] = useState<ArticlesProp[]>([]);
   const [copied, setCopied] = useState<string>("");
-  const [data, setData] = useState<DataProps>({"error": ""})
 
   // RTK lazy query
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
   
-  if (error && 'data' in error){
-    setData(error.data as DataProps)
-  }
   // Load data from localStorage on mount
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
@@ -129,7 +125,7 @@ const Demo = () => {
             Well, that wasn't supposed to happen...
             <br />
             <span className='font-satoshi font-normal text-gray-700'>
-              {data.error}
+              {'data' in error ? (error.data as DataProps).error : ""}
             </span>
           </p>
         ) : (
